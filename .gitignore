@@ -1,3 +1,5 @@
 #ignore any log.txt file
 log.txt
 wget-log
+*.json
+example-json.txt
