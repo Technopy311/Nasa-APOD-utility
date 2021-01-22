@@ -39,6 +39,7 @@ def loadAll():
 	JSON_DATA = json.loads(DATA)
 
 
+
 def DownloadLowRes():
 	#This function only downloads the low resolution image
 
@@ -55,6 +56,7 @@ def DownloadLowRes():
 	print("\n\n")
 
 
+
 def DownloadHD():
 	#This function only downloads the high resolution image
 
@@ -69,6 +71,7 @@ def DownloadHD():
 	print("\n")
 	print("Highresolution image download succesfully")
 	print("\n\n")
+
 
 
 def getInfo(selection):
@@ -108,6 +111,7 @@ def getInfo(selection):
 			sleep(PAUSE_TIME)
 
 
+
 #TAKE SERIOSLY CARE HERE
 #THIS IS THE MOST IMPORTANT DEF IN ALL APP
 
@@ -126,7 +130,11 @@ def jk():
 #Of course not ;D
 
 
+
 def downloadBackground():
+	#Getting the current directory
+	currentDirectory = os.getcwd()
+
 	#Getting the info from json
 
 	getInfo(1)
@@ -141,10 +149,8 @@ def downloadBackground():
 	#setting the image as background
 
 	print("Setting as a background.")
-	os.system("mv /home/technopy/Documentos/programming/python/nasaAPOD/APOD.jpg /home/technopy/.local/share/backgrounds/default.jpg")
+	os.system()
 	print("succesfully changed background.")
-	
-	currentDirectory = os.getcwd()
 
 	#Displaying a notification	
 	Notification(
@@ -161,6 +167,52 @@ def downloadBackground():
 	file.close()
 
 
+
+def InitialSetup():
+	print("Initializing... \n")
+	print("here are two options of setup")
+	
+	print("(1) Rename your actual wallpaper file.\n"
+		"(2) Download the image, and set it as wallapaper.")
+
+	print("This are only short descriptions")
+	print("What do you choose?")
+
+	option = input(": ")
+	option = int(option)
+	
+	if option == 1:
+		print("Input here, the ABSOLUTE PATH of yout actual desktop wallpaper")
+		PATH = input(": ")
+		print("make shure its the right path, else, just re run the script.")
+		
+		currentDirectory = os.getcwd()
+		save_file = os.path.join(currentDirectory, "Assets")
+		save_file = str(save_file)
+
+		save = open((save_file + "path.conf"), 'w')
+
+		save.write(PATH)
+		
+		print("the configuration is done, would you like to change your background? Y/N")
+		option = input(": ")
+
+		if option == 'Y' or option == 'y':
+			pass
+		else:
+			print("Ok, cya")
+			sleep(PAUSE_TIME)
+			exit()
+	
+
+	elif option == 2:
+		pass
+
+	else:
+		print("That option doesn't exists or something else went wrong")
+
+
+
 def main():	
 	# loading all urls and api 
 	
@@ -170,8 +222,8 @@ def main():
 	
 	print("What would you like to do? \n")
 	print("(1) Change your current background.      (2) Get all info of today image. \n"
-		"(3) Only Download low resolution image.  (4) Only Download high resolution image.\n")
-	
+		"(3) Only Download low resolution image.  (4) Only Download high resolution image.\n"
+		"(5) Initial Setup. ")
 	
 	option = input(": ")
 
@@ -192,6 +244,10 @@ def main():
 	elif option == 4:
 		print("The option selected is: " +str(option))
 		DownloadHD()
+
+	elif option == 5:
+		print("The option selected is: " +str(option))
+		InitialSetup()
 
 	else:
 		print("That option doesn't exists or something else went wrong")
