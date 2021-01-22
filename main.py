@@ -1,9 +1,11 @@
 # importing packages
+
 import requests
 import json
 from pynotifier import Notification
 from os import system, path
 from time import sleep
+
 
 pauseTime = (1)
 
@@ -23,15 +25,12 @@ def downloadBackground():
 	#Photo's date
 	date = JSON_DATA['date']
 	print("The date is: "+ str(date) +"\n\n")
-
+	
+	#a little pause.
 	sleep(pauseTime)
 
-	description = JSON_DATA['explanation']
-
-	#donwloading the image
-	print('Downloading the image.\n\n')
-	print("Photo Description: \n" + str(description) + " \n")
-	
+	#Starting the download process of the image
+	print('Downloading the image. \n\n')
 	sleep(pauseTime)
 	
 	system('wget '+ str(url) + ' --quiet  -O \"APOD.jpg\" ')
@@ -47,7 +46,7 @@ def downloadBackground():
 	Notification(
 		title="Image succesfully changed to today's APOD ;D",
 		description="The background image has been succesfully changed to today's APOD.",
-		icon_path=path.join("python-logo.png"),
+		icon_path=path.join("/Assets","python-logo.png"),
 		duration=2,
 		urgency=Notification.URGENCY_CRITICAL
 	).send()
@@ -85,7 +84,10 @@ def loadAll():
 	
 
 def main():
+
+	#loading all urls and api 
 	loadAll()
+
 	#options for the user
 	
 	print("What would you like to do? \n")
@@ -98,10 +100,11 @@ def main():
 
 	if option == 1:
 		print("Option selected is: " +str(option))
-		downloadBackground()
+
 
 	elif option == 2:
 		print("Option selected is: " +str(option))
+		downloadBackground()
 	elif option == 3:
 		print("Option selected is: " +str(option))
 	elif option == 4:
