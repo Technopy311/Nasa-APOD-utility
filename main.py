@@ -39,6 +39,37 @@ def loadAll():
 	JSON_DATA = json.loads(DATA)
 
 
+def DownloadLowRes():
+	#This function only downloads the low resolution image
+
+	#Get the url from the json
+	low_res_url = JSON_DATA['url']
+
+	#Download the image and save it
+	os.system("wget " + str(low_res_url) + " -O Low-Resolution-Img.jpg") 
+	
+	sleep(PAUSE_TIME)
+
+	print("\n")
+	print("Low resolution image download succesfully")
+	print("\n\n")
+
+
+def DownloadHD():
+	#This function only downloads the high resolution image
+
+	#Get the url from the json
+	high_res_url = JSON_DATA['hdurl']
+
+	#Download the image and save it
+	os.system("wget " + str(high_res_url) + " -O High-Resolution-Img.jpg") 
+	
+	sleep(PAUSE_TIME)
+
+	print("\n")
+	print("Highresolution image download succesfully")
+	print("\n\n")
+
 
 def getInfo(selection):
 	
@@ -138,27 +169,29 @@ def main():
 	# options for the user
 	
 	print("What would you like to do? \n")
-	print("(1) Change your current background,    (2) Get all info of today image,\n"
-			"(3)Only Download low resolution image,    (4)Only Download high resolution image\n")
+	print("(1) Change your current background.      (2) Get all info of today image. \n"
+		"(3) Only Download low resolution image.  (4) Only Download high resolution image.\n")
 	
-
+	
 	option = input(": ")
 
 	option = int(option)
 
 	if option == 1:
-		print("Option selected is: " +str(option) )
+		print("The option selected is: " +str(option) )
 		downloadBackground()
 
 	elif option == 2:
-		print("Option selected is: " +str(option))
+		print("The option selected is: " +str(option))
 		getInfo(2)
 
 	elif option == 3:
-		print("Option selected is: " +str(option))
+		print("The option selected is: " +str(option))
+		DownloadLowRes()
 
 	elif option == 4:
-		print("Option selected is: " +str(option))
+		print("The option selected is: " +str(option))
+		DownloadHD()
 
 	else:
 		print("That option doesn't exists or something else went wrong")
