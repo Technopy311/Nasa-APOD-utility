@@ -3,4 +3,3 @@ py-notifier
 os
 json
 time
-pip install fsc.formatting
