@@ -1,2 +1,2 @@
-#ignore any .txt file
-*.txt
+#ignore any log.txt file
+log.txt

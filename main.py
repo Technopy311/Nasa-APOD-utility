@@ -3,7 +3,9 @@ import requests
 import json
 from pynotifier import Notification
 from os import system, path
+from time import sleep
 
+pauseTime = (1)
 
 
 
@@ -17,16 +19,21 @@ def downloadBackground():
 	#high defition photo
 	url = JSON_DATA['hdurl']
 	print("The url is "+ str(url) +"\n")
-	
+
 	#Photo's date
 	date = JSON_DATA['date']
-	print("The date is: "+ str(date) +"\n")
+	print("The date is: "+ str(date) +"\n\n")
+
+	sleep(pauseTime)
 
 	description = JSON_DATA['explanation']
 
 	#donwloading the image
-	print('Downloading the image.\n')
+	print('Downloading the image.\n\n')
 	print("Photo Description: \n" + str(description) + " \n")
+	
+	sleep(pauseTime)
+	
 	system('wget '+ str(url) + ' --quiet  -O \"APOD.jpg\" ')
 	print('Image Downloaded')
 
@@ -79,10 +86,10 @@ def loadAll():
 
 def main():
 	loadAll()
-	#options for user
+	#options for the user
 	
 	print("What would you like to do? \n")
-	print("(1)Make first setup,    (2) Change your current background,    (3) Get all info of today image,\n"
+	print("(1)Make rst setup,    (2) Change your current background,    (3) Get all info of today image,\n"
 			"(4)Only Download low resolution image,    (5)Only Download high resolution image\n")
 	
 	option = input(": ")
@@ -91,6 +98,7 @@ def main():
 
 	if option == 1:
 		print("Option selected is: " +str(option))
+		downloadBackground()
 
 	elif option == 2:
 		print("Option selected is: " +str(option))
