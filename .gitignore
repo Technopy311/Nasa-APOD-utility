@@ -1,6 +1,13 @@
 #ignore any log.txt file
 log.txt
+
 wget-log
+
 *.json
+
 example-json.txt
+
+High-Resolution-Img.jpg
+Low-Resolution-Img.jpg
+
 *.jpg
