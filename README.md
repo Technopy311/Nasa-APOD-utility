@@ -19,13 +19,17 @@ any of these or other.
 First clone the repo, then in the repo folder, you just make
 
 '''
-pip3 install -r requirements.txt
+
+$ pip3 install -r requirements.txt
+
 '''
 
 > Or if ti doesn't works, try making: 
 
 '''
-pip install -r requirements.txt
+
+$ pip install -r requirements.txt
+
 '''
 
 Then for executing the script, just make
