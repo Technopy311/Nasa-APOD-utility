@@ -24,13 +24,17 @@ you just need to execute in the terminal
 Or if it doesn't works, try making:
 > pip install -r requirements.txt
 
+The last step is you to get an api key, (it's 100% free),
+you can get it at: https://api.nasa.gov/?ref=public-apis#signUp
 
-Then for executing the script, just make in the terminal
+and then in the **main.py** search the URL variable (in line 27), 
+and replace the DEMO-KEY text with your previously generated key.
 
+Then just execute the script in the terminal:
 
 > python3 ./main.py
 
 For setting up the proper configurations of the script,
 **just run it**, and in the option selector, choose the
-**option 5**, then choose between *one of the 2 options* of setting up
-and then ***follow the instructions of the assistant.***
+**option 5** (Initial Setup), then choose between **one of the 2 options** of setting up
+and then just ***follow the instructions of the assistant.***

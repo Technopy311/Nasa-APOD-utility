@@ -21,11 +21,15 @@ def loadAll():
 	
 	print("INITIALIZING")
 	print("Loading the api data")
-	URL = 'https://api.nasa.gov/planetary/apod?api_key=F6wkuYMeExyyZW9516419T3pGXzHcA5mkEwkNTF8'
+
+	#Here you can set the api key, you can get it at https://api.nasa.gov/?ref=public-apis#signUp
+
+	URL = 'https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY'
 
 	if URL == 'https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY':
-		print("Remember to put the nasa api key.")
+		print("Remember to put the nasa api key on URL.")
 		exit()
+		
 	else:
 		print("The url is fine")
 
