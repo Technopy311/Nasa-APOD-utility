@@ -16,28 +16,20 @@ distros, so it's not known if it will work properly on
 any of these or other.
 
 ## Installing Instructions.
-First clone the repo, then in the repo folder, you just make
+First clone the repo, then in the repo folder, 
+you just need to execute in the terminal
 
-' ' '
+> pip3 install -r requirements.txt
 
-$ pip3 install -r requirements.txt
+*** Or if it doesn't works, try making: ***
 
-' ' '
+> pip install -r requirements.txt
 
-> Or if ti doesn't works, try making: 
+Then for executing the script, just make in the terminal
 
-' ' '
-
-$ pip install -r requirements.txt
-
-' ' '
-
-Then for executing the script, just make
-'''
-python3 ./main.py
-'''
+> python3 ./main.py
 
 For setting up the proper configurations of the script,
-just run it, and in the option selector, choose the
-option 5, then choose between one of the 2 options of setting up
-and then follow the instructions of the assistant.
+**just run it**, and in the option selector, choose the
+**option 5**, then choose between *one of the 2 options* of setting up
+and then ***follow the instructions of the assistant.***
