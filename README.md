@@ -11,9 +11,9 @@ and maybe MacOs, but never tested in MacOs, it was tested and made
 in Ubuntu LTS 20.4, alias focal, so it will certainly work on any debian
 based distro like ubuntu-mint, or in Raspberry Pi OS.
 it only uses python and no other languages.
-but it wasn't tested on fedora, gentoo or arch based 
+It hasn't been tested on fedora, gentoo or arch based 
 distros, so it's not known if it will work properly on 
-any of these or other.
+any of these, or other.
 
 ## Installing Instructions.
 First clone the repo, then in the repo folder, 
