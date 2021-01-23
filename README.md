@@ -1,8 +1,9 @@
 # NASA APOD Utility
 
 ### This python3 script has been made only for fun and for killing time
-### And it's not official by NASA.
+### and it's not official by NASA.
 
+### APOD stands for Astro Photography Of the Day.
 ***
 
 ### Alert:
