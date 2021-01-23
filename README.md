@@ -21,10 +21,7 @@ you just need to execute in the terminal
 
 > pip3 install -r requirements.txt
 
-
-*** Or if it doesn't works, try making: ***
-
-
+Or if it doesn't works, try making:
 > pip install -r requirements.txt
 
 
