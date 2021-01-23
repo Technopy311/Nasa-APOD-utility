@@ -14,11 +14,13 @@ def loadAll():
 	global currentDirectory 
 
 	currentDirectory = os.getcwd()
-
+	
+	'''
 	conf = open((currentDirectory + "/Assets/path.conf"), 'w')
 	conf.write(" ")
 	conf.close()
-	
+	'''
+
 	print("INITIALIZING")
 	print("Loading the api data")
 
