@@ -1,10 +1,26 @@
 # NASA APOD Utility
 
-### This python3 script has been made only for fun and for killing time
-### and it's not official by NASA.
+## This python3 script has been made only for fun and for killing time
+## and it's not official by NASA.
 
-### APOD stands for Astro Photography Of the Day.
+
 ***
+
+
+### Description
+
+This utility script, handles the requests and automatizes some processes
+using the Nasa's APOD api, whith this utility you can:
+
+1. Download and automatically setup the APOD image as your wallpaper.
+2. Single download of the low resolution version of the APOD image.
+3. Single download of the  high resolution version of the APOD image
+4. Donwload all information from api about the APOD image.
+
+
+
+**APOD stands for Astro Photography Of the Day.**
+
 
 ### Alert:
 This script, was designed overall, for **_linux enviroments_**, 
