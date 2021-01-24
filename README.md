@@ -1,7 +1,6 @@
 # NASA APOD Utility
 
-## This python3 script has been made only for fun and for killing time
-## and it's not official by NASA.
+## This python3 script has been made only for fun and for killing during quarantine time and it's not official by NASA.
 
 
 ***
