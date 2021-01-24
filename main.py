@@ -19,29 +19,37 @@ def current():
 	return currentDirectory
 
 
+def resetConf():
+
+	print("Making reset to all config files")
+	currentDirectory = current()
+	key_conf = open((currentDirectory + "/Assets/API-KEY.conf"), 'w')
+	key_conf.write("DEMO-KEY")
+	key_conf.close
+
+	path_conf = open((currentDirectory + "/Assets/path.conf"), 'w')
+	path_conf.write("BACKGROUND PATH")
+	path_conf.close
+
+	print("Config files succesfully reseted.")
+
 def loadAll():
 	global background_dir 
 	global currentDirectory 
 
 	currentDirectory = current()
 	
-	'''
-	conf = open((currentDirectory + "/Assets/path.conf"), 'w')
-	conf.write(" ")
-	conf.close()
-	'''
-
-	print("INITIALIZING")
-	print("Loading the api data")
-
+	print("INITIALIZING... ")
+	print("Loading the api data.")
 	#Here you can set the api key, you can get it at https://api.nasa.gov/?ref=public-apis#signUp
 
-	KEY = open((currentDirectory + "/Assets/API-KEY.conf"), "r")
-	KEY = KEY.readline()
+	key_from_file = open((currentDirectory + "/Assets/API-KEY.conf"), "r")
+	KEY = key_from_file.readline()
 	KEY = str(KEY)
 
 
 	api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + KEY)
+	api_url = str(api_url)
 
 	if api_url == "https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY":
 		print("Remember to put the key in the Assets/API-KEY.conf")
@@ -49,8 +57,11 @@ def loadAll():
 	else:
 		print("Api key loaded succesfully")	
 
+	#print("Api url: " + api_url)
 
+	#request = requests.get("https://api.nasa.gov/planetary/apod?api_key=F6wkuYMeExyyZW9516419T3pGXzHcA5mkEwkNTF8")
 	request = requests.get(api_url)
+
 	status = request.status_code
 	DATA = request.text
 	
@@ -212,8 +223,8 @@ def downloadBackground():
 
 def setup1():
 	currentDirectory = current()
-	save_file = (currentDirectory + "/Assets/path.conf")
-
+	path_file = (currentDirectory + "/Assets/path.conf")
+	key_file = (currentDirectory + "/Assets/API-KEY.conf")
 
 	print("Be conscient that your current wallpaper will be replaced, ")
 	print("So make a copy of it, if you wana save it.")
@@ -224,12 +235,22 @@ def setup1():
 	"Example: /home/USERNAME/Desktop/wallpaper.jpg \n")
 
 	path = input("Enter the path: ")
-	print("make shure its the right path, else,\n just run or re run the option 1.")
+	print("make shure its the right path, else,\n just re run the option 1. \n")
 
-	save = open(save_file, 'w' )
-	save.write(path)
-	save.close()
-	
+	save_path = open(path_file, 'w' )
+	save_path.write(path)
+	save_path.close()
+
+	print("Now input here the key of your api, it will be saved at /Assets/API-KEY.conf file, \n "
+	"If you modify it, make shure it doesn't have white lines \n")
+
+	key = input("Enter the key: ")
+	print("make shure its the right key, else,\n just re run the option 1.\n\n")
+
+	save_key = open(key_file, 'w' )
+	save_key.write(key)
+	save_key.close()
+
 	print("the configuration is done, would you like now to change your background? (1)Y / (2)N")
 	SecondOption = input(": ")
 	SecondOption = int(SecondOption)
@@ -281,10 +302,11 @@ def setup2():
 
 
 def InitialSetup():
-	
+
 
 	print("Initializing... \n")
 	
+	resetConf()
 
 	print("here are two options of setup")
 	print("(1) Replace your actual wallpaper file.\n"
@@ -319,7 +341,7 @@ def main():
 	print("What would you like to do? \n")
 	print("(1) Change your current background.      (2) Get all info of today image. \n"
 		"(3) Only Download low resolution image.  (4) Only Download high resolution image.\n"
-		"(5) Initial Setup. ")
+		"(5) Initial Setup. (6) Reset all config files (wallpaper path & api-key)")
 	
 	option = input(": ")
 
@@ -346,6 +368,10 @@ def main():
 		print("The option selected is: " +str(option))
 		InitialSetup()
 
+	elif option == 6:
+		print("The option selected is: " +str(option))
+		resetConf()
+
 	else:
 		print("That option doesn't exists or something else went wrong")
 		jk()
@@ -360,6 +386,7 @@ if __name__ == '__main__':
 		print("Would you like to make another thing?")
 		print("(1)Yes (2)No")
 		option = input(": ")
+		option = int(option)
 
 		if option == 1:
 			try:
