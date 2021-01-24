@@ -9,11 +9,19 @@ from time import sleep
 
 PAUSE_TIME = (2)
 
+
+def current():
+	currentDirectory = os.getcwd()
+	currentDirectory = str(currentDirectory)
+	
+	return currentDirectory
+
+
 def loadAll():
 	global background_dir 
 	global currentDirectory 
 
-	currentDirectory = os.getcwd()
+	currentDirectory = current()
 	
 	'''
 	conf = open((currentDirectory + "/Assets/path.conf"), 'w')
@@ -26,16 +34,21 @@ def loadAll():
 
 	#Here you can set the api key, you can get it at https://api.nasa.gov/?ref=public-apis#signUp
 
-	URL = 'https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY'
+	KEY = open((currentDirectory + "/Assets/API-KEY.conf"), "r")
+	KEY = KEY.readline()
+	KEY = str(KEY)
 
-	if URL == 'https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY':
-		print("Remember to put the nasa api key on URL.")
-		exit()
-		
+
+	api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + KEY)
+
+	if api_url == "https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY":
+		print("Remember to put the key in the Assets/API-KEY.conf")
+
 	else:
-		print("The url is fine")
+		print("Api key loaded succesfully")	
 
-	request = requests.get(URL)
+
+	request = requests.get(api_url)
 	status = request.status_code
 	DATA = request.text
 	
@@ -45,11 +58,12 @@ def loadAll():
 
 	# checking connection
 	if status == 200:
-		text = "Succesfully reached data"
+		text = "Succesfully reached api"
 		print("Status: " + str(status) +" "+ text + "\n")
+	
 	else:
-		text = "Something else went wrong"
-		print("Status: " + str(status) +" "+ text + "\n")
+		text = "Make shure the api key is valid \n and check if you have network connection."
+		print("Request to the API status: " + str(status) +" "+ text + "\n")
 		jk()
 		exit()
 	
@@ -109,9 +123,10 @@ def getInfo(selection):
 		sleep(PAUSE_TIME)
 
 		#high defition url photo
-		global IMGURL
+		
 		IMGURL = JSON_DATA['hdurl']
 		print("The high definition image's url is "+ str(IMGURL) +"\n")
+
 
 		sleep(PAUSE_TIME)
 
@@ -151,7 +166,8 @@ def jk():
 
 
 def downloadBackground():
-	global currentDirectory
+	
+	currentDirectory = current()
 
 	background_dir = open((currentDirectory + "/Assets/path.conf"), 'r')
 	background_dir = background_dir.readline()
@@ -165,7 +181,9 @@ def downloadBackground():
 	print('Downloading the image. \n\n')
 	sleep(PAUSE_TIME)
 	
-	os.system('wget '+ str(IMGURL) + ' --quiet  -O \"APOD.jpg\" ')
+	HDURL = JSON_DATA['hdurl']
+
+	os.system('wget '+ str(HDURL) + ' -O \"APOD.jpg\" ')
 	print('Image Downloaded')
 
 	#setting the image as background
@@ -191,10 +209,9 @@ def downloadBackground():
 
 
 def setup1():
-	
-	currentDirectory = os.getcwd()
-	currentDirectory = str(currentDirectory)
+	currentDirectory = current()
 	save_file = (currentDirectory + "/Assets/path.conf")
+
 
 	print("Be conscient that your current wallpaper will be replaced, ")
 	print("So make a copy of it, if you wana save it.")
@@ -259,6 +276,8 @@ def setup2():
 
 	setup1()
 
+
+
 def InitialSetup():
 	
 
@@ -304,6 +323,7 @@ def main():
 
 	option = int(option)
 
+
 	if option == 1:
 		print("The option selected is: " +str(option) )
 		downloadBackground()
@@ -334,9 +354,26 @@ def main():
 if __name__ == '__main__':
 	try:
 		main()
-		print("I hope c'ya soon :P")
 		
+		print("Would you like to make another thing?")
+		print("(1)Yes (2)No")
+		option = input(": ")
+
+		if option == 1:
+			try:
+				main()
+			
+			except KeyboardInterrupt:
+				print("\n Bye ;D")
+				exit()
+
+		elif option == 2:
+			print("I hope c'ya soon, bye :P")
+		else:
+			print("Something else went wrong.")
+
+
 	except KeyboardInterrupt:
-		print("Bye ;D")
+		print("\n Bye ;D")
 		exit()
 
