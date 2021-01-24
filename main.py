@@ -308,7 +308,7 @@ def InitialSetup():
 
 
 def main():	
-	# loading all urls and api 
+	# loading all urls and api data
 	
 	loadAll()
 

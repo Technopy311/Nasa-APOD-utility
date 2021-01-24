@@ -28,8 +28,7 @@ Or if it doesn't works, try making:
 The last step is you to get an api key, (it's 100% free),
 you can get it at: https://api.nasa.gov/?ref=public-apis#signUp
 
-and then in the **main.py** search the URL variable (in line 27), 
-and replace the DEMO-KEY text with your previously generated key.
+To load the api key, you must write it in Assets/API-KEY.conf file, only the key, not the url.
 
 Then just execute the script in the terminal:
 
