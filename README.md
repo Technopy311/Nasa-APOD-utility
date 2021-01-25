@@ -18,7 +18,7 @@ using the Nasa's APOD api, whith this utility you can:
 
 
 
-**APOD stands for Astro Photography Of the Day.**
+**APOD stands for Astronomy Picture of the Day.**
 
 
 ### Alert:
