@@ -33,12 +33,13 @@ def resetConf():
 
 	print("Config files succesfully reseted.")
 
-def loadAll():
-	global background_dir 
-	global currentDirectory 
 
+def loadAll():
+
+	global background_dir
 	currentDirectory = current()
 	
+
 	print("INITIALIZING... ")
 	print("Loading the api data.")
 	#Here you can set the api key, you can get it at https://api.nasa.gov/?ref=public-apis#signUp
@@ -51,23 +52,45 @@ def loadAll():
 	api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + KEY)
 	api_url = str(api_url)
 
-	if api_url == "https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY":
-		print("Remember to put the key in the Assets/API-KEY.conf")
-
-	else:
-		print("Api key loaded succesfully")	
-
-	#print("Api url: " + api_url)
-
-	#request = requests.get("https://api.nasa.gov/planetary/apod?api_key=F6wkuYMeExyyZW9516419T3pGXzHcA5mkEwkNTF8")
-	request = requests.get(api_url)
-
-	status = request.status_code
-	DATA = request.text
-	
 	background_dir = open((currentDirectory + "/Assets/path.conf"), 'r')
 	background_dir = background_dir.readline()
 
+	error = 0	
+
+	if api_url == "https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY":
+		error += 1
+
+	if background_dir == "BACKGROUND-PATH":
+		error += 2
+
+
+	if error == 3:
+		print("Code error: " + str(error) )
+		print("you must make a right configuration of wallpaper and your background path")
+		print("You can make the complete initial setup with the assistant, (option 5 in the main menu selector).")
+		exit()
+
+	elif error == 2:
+		print("Code error: " + str(error) )
+		print("Remember to setup your wallpaper path configuration in Assets/path.conf")
+		print("You can make the complete initial setup with the assistant, (option 5 in the main menu selector).")
+		exit()
+
+	elif error == 1:
+		print("Code error: " + str(error) )
+		print("Remember to put the key in the Assets/API-KEY.conf")
+		print("You can make the complete initial setup with the assistant, (option 5 in the main menu selector).")
+		exit()
+
+	elif error == 0:
+		print("Api key loaded succesfully.")	
+		print("And background conf loaded succesfully.")
+
+	request = requests.get(api_url)
+	status = request.status_code
+	
+	
+	DATA = request.text
 
 	# checking connection
 	if status == 200:
@@ -203,7 +226,11 @@ def downloadBackground():
 
 	print("Setting as a background.")
 	
+	
+	#os.replace((currentDirectory + "/APOD.jpg "), background_dir)
+    
 	os.system("mv " + (currentDirectory + "/APOD.jpg ") + background_dir)
+	
 	print("succesfully changed background.")
 
 	#Displaying a notification	
@@ -332,10 +359,7 @@ def InitialSetup():
 
 
 def main():	
-	# loading all urls and api data
 	
-	loadAll()
-
 	# options for the user
 	
 	print("What would you like to do? \n")
@@ -345,23 +369,30 @@ def main():
 	
 	option = input(": ")
 
-	option = int(option)
+	try:
+		option = int(option)
+	except ValueError:
+		print("The value entered isn't valid")
 
 
 	if option == 1:
 		print("The option selected is: " +str(option) )
+		loadAll()
 		downloadBackground()
 
 	elif option == 2:
 		print("The option selected is: " +str(option))
+		loadAll()
 		getInfo(2)
 
 	elif option == 3:
 		print("The option selected is: " +str(option))
+		loadAll()
 		DownloadLowRes()
 
 	elif option == 4:
 		print("The option selected is: " +str(option))
+		loadAll()
 		DownloadHD()
 
 	elif option == 5:
