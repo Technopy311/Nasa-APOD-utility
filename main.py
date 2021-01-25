@@ -1,7 +1,5 @@
-
-
-# importing packages
-
+#importing packages
+from colorama import Fore, Style
 import requests
 import json
 from pynotifier import Notification
@@ -359,7 +357,7 @@ def InitialSetup():
 
 
 def main():	
-	
+
 	# options for the user
 	
 	print("What would you like to do? \n")
@@ -376,35 +374,35 @@ def main():
 
 
 	if option == 1:
-		print("The option selected is: " +str(option) )
+		print("The option selected is: " +str(option) + "\n")
 		loadAll()
 		downloadBackground()
 
 	elif option == 2:
-		print("The option selected is: " +str(option))
+		print("The option selected is: " +str(option) + "\n")
 		loadAll()
 		getInfo(2)
 
 	elif option == 3:
-		print("The option selected is: " +str(option))
+		print("The option selected is: " +str(option) + "\n")
 		loadAll()
 		DownloadLowRes()
 
 	elif option == 4:
-		print("The option selected is: " +str(option))
+		print("The option selected is: " +str(option) + "\n")
 		loadAll()
 		DownloadHD()
 
 	elif option == 5:
-		print("The option selected is: " +str(option))
+		print("The option selected is: " +str(option) + "\n")
 		InitialSetup()
 
 	elif option == 6:
-		print("The option selected is: " +str(option))
+		print("The option selected is: " +str(option) + "\n")
 		resetConf()
 
 	else:
-		print("That option doesn't exists or something else went wrong")
+		print("That option doesn't exists or something else went wrong \n")
 		jk()
 		exit()
 
@@ -412,9 +410,12 @@ def main():
 
 if __name__ == '__main__':
 	try:
+		#Configuring colorama
+		print(Fore.CYAN)
+		print(Style.BRIGHT)	
 		main()
 		
-		print("Would you like to make another thing?")
+		print("\n Would you like to make another thing?")
 		print("(1)Yes (2)No")
 		option = input(": ")
 		option = int(option)
@@ -428,9 +429,9 @@ if __name__ == '__main__':
 				exit()
 
 		elif option == 2:
-			print("I hope c'ya soon, bye :P")
+			print("\n I hope c'ya soon, bye :P")
 		else:
-			print("Something else went wrong.")
+			print("\n Something else went wrong.")
 
 
 	except KeyboardInterrupt:
