@@ -281,6 +281,7 @@ def setup1():
 	SecondOption = int(SecondOption)
 
 	if SecondOption == 1:
+		loadAll()
 		downloadBackground()
 	else:
 		jk()
