@@ -5,6 +5,12 @@
 
 ***
 
+Copyright, this projecr is owned by @Technopy, it can 
+be modified, but always giving credit to it's owner
+
+[GitHub Profile: (https://github.com/Technopy311)]
+
+***
 
 ### Description
 
