@@ -11,3 +11,5 @@ High-Resolution-Img.jpg
 Low-Resolution-Img.jpg
 
 *.jpg
+
+/__pycache__/

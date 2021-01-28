@@ -8,7 +8,7 @@
 
 ### Description
 
-This utility script, handles the requests and automatizes some processes
+This utility script (main.py), handles the requests and automatizes some processes
 using the Nasa's APOD api, whith this utility you can:
 
 1. Download and automatically setup the APOD image as your wallpaper.
@@ -20,6 +20,12 @@ using the Nasa's APOD api, whith this utility you can:
 
 **APOD stands for Astronomy Picture of the Day.**
 
+If you want to use this script with cronjobs, the main.py script
+won't work, so for that i've designed the "change-background.py"
+script, there, you only need to change the lines, 10 and 16
+there, you just need to define the background path, and the 
+API key, and that's it. 
+**you need to have the main.py script on the same directory as the "change-background.py"**
 
 ### Alert:
 This utility, was designed for **_linux enviroments_**, 
@@ -66,3 +72,4 @@ or the api-key, just run the assistant again.
 
 ### I hope you like this you like this utility, and if you think there is any update/upgrade to do
 ### Just post it on the issues tab, use this utility carely.
+
