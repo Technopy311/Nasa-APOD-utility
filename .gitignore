@@ -13,3 +13,5 @@ Low-Resolution-Img.jpg
 *.jpg
 
 /__pycache__/
+
+autosetup.py
