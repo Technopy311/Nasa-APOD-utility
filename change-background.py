@@ -3,6 +3,7 @@ import requests
 import json
 
 
+
 #Downloading, Changing and setting up the new background.
 
 def current():
@@ -17,11 +18,8 @@ def loadAll():
 
 	global background_dir
 	currentDirectory = current()
-	
 
-	#Here you can set the api key, you can get it at https://api.nasa.gov/?ref=public-apis#signUp
-
-	key_from_file = open((currentDirectory + "/Assets/API-KEY.conf"), "r")
+	key_from_file = open((currentDirectory + "/Assets/API-KEY.conf"), "r" )
 	KEY = key_from_file.readline()
 	KEY = str(KEY)
 
@@ -37,48 +35,12 @@ def loadAll():
 	if api_url == "https://api.nasa.gov/planetary/apod?api_key=DEMO-KEY":
 		error += 1
 
-	if background_dir == "BACKGROUND-PATH":
-		error += 2
-
-
-	if error == 3:
-
-
-
-		exit()
-
-	elif error == 2:
-
-
-
-		exit()
-
-	elif error == 1:
-
-
-
-		exit()
-
-	elif error == 0:
-
-		request = requests.get(api_url)
-		status = request.status_code
-	
-	
+	request = requests.get(api_url )
+		
 	DATA = request.text
 
-	# checking connection
-	if status == 200:
-		text = "Succesfully reached api"
+	#parsing the json and 
 
-	
-	else:
-		text = "Make shure the api key is valid \n and check if you have network connection."
-
-		jk()
-		exit()
-	
-	# parsing the json and 
 	global JSON_DATA 
 	JSON_DATA = json.loads(DATA)
 
@@ -102,12 +64,11 @@ def downloadBackground():
 
 	#Making log
 
-	file = open( str(currentDirectory) + "log.txt", "a")
-	file.write("Succesfully downloaded today's APOD image, and changed the background")
+	file = open((currentDirectory + "log.txt"), "w")
+	file.write("Succesfully downloaded today's APOD image, and changed the background\n")
 	file.close()
 
 
 
-if __name__ == '__main__':
-	loadAll()
-	downloadBackground()
+loadAll()
+downloadBackground()
