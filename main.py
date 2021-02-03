@@ -114,8 +114,19 @@ def loadAll():
 	JSON_DATA = json.loads(DATA)
 
 
+	
+
+
 
 def DownloadLowRes():
+	#check if the media type is an image
+	media_type = JSON_DATA['media_type']
+
+	if media_type.lower() != "image":
+		print("This media type cannot be set as wallpaper, because it is")
+		print("Media type: " + media_type)
+		exit()
+
 	#This function only downloads the low resolution image
 
 	#Get the url from the json
@@ -133,6 +144,15 @@ def DownloadLowRes():
 
 
 def DownloadHD():
+	#check if the media type is an image
+	
+	media_type = JSON_DATA['media_type']
+
+	if media_type.lower() != "image":
+		print("This media type cannot be set as wallpaper, because it is")
+		print("Media type: " + media_type)
+		exit()
+
 	#This function only downloads the high resolution image
 
 	#Get the url from the json
@@ -209,6 +229,14 @@ def jk():
 
 def downloadBackground():
 	
+	#Check if the file is an image
+	media_type = JSON_DATA['media_type']
+
+	if media_type.lower() != "image":
+		print("This media type cannot be set as wallpaper, because it is")
+		print("Media type: " + media_type)
+		exit()
+
 	currentDirectory = current()
 
 	background_dir = open((currentDirectory + "/Assets/path.conf"), 'r')
