@@ -7,14 +7,36 @@ from time import sleep
 
 
 '''
-Copyright, this project is owned by @Technopy, it can 
-be modified, but always giving credit to it's owner
-
+Copyright, this project is owned by @Technopy311, it can 
+be modified, but always giving credit to it's owner (me)
+and citing the github profile.
 [GitHub Profile: (https://github.com/Technopy311)]
 '''
 
 
 PAUSE_TIME = (2)
+
+
+def download_image(url, write_path):
+	print("Downloading")
+	
+	response = requests.get(url)
+
+	if response.status_code == 200:
+		print('Image Downloaded')
+	else:
+		print("Something else happened")
+		print("HTTP error: " + response.status_code)
+		exit()
+
+	#setting the image as background
+
+	print("Saving Image")
+	
+	#opening the file, writing and closing image
+	wallpaper = open(write_path, 'wb')
+	wallpaper.write(response.content)
+	wallpaper.close()
 
 
 def current():
@@ -100,7 +122,7 @@ def loadAll():
 	# checking connection
 	if status == 200:
 		text = "Succesfully reached api"
-		print("Status: " + str(status) +" "+ text + "\n")
+		print("Status: " + str(status) +", "+ text + "\n")
 	
 	else:
 		text = "Make shure the api key is valid \n and check if you have network connection."
@@ -113,7 +135,7 @@ def loadAll():
 	JSON_DATA = json.loads(DATA)
 
 
-	
+
 
 
 
@@ -152,24 +174,27 @@ def DownloadHD():
 		print("Media type: " + media_type)
 		exit()
 
+	current_directory = current()
+
 	#This function only downloads the high resolution image
 
 	#Get the url from the json
 	high_res_url = JSON_DATA['hdurl']
 
 	#Download the image and save it
-	os.system("wget " + str(high_res_url) + " -O High-Resolution-Img.jpg") 
-	
+	download_image(high_res_rl, (current_directory + "./APOD.jpg"))
+
 	sleep(PAUSE_TIME)
 
 	print("\n")
-	print("Highresolution image download succesfully")
+	print("High resolution image download succesfully")
 	print("\n\n")
 
 
 
 def getInfo(selection):
 	
+	# number 1 is the same asTrue
 	if True:
 		#title
 		title = JSON_DATA['title']
@@ -238,6 +263,7 @@ def downloadBackground():
 
 	currentDirectory = current()
 
+	#read the wallpaper route from the path.conf file
 	background_dir = open((currentDirectory + "/Assets/path.conf"), 'r')
 	background_dir = background_dir.readline()
 
@@ -251,21 +277,29 @@ def downloadBackground():
 	sleep(PAUSE_TIME)
 	
 	HDURL = JSON_DATA['hdurl']
-
-	os.system('wget '+ str(HDURL) + ' -O \"APOD.jpg\" ')
-	print('Image Downloaded')
+	
+	#use requests for download the image
+	response = requests.get(HDURL)
+	if response.status_code == 200:
+		print('Image reached')
+	else:
+		print("Something else happened")
+		print("HTTP error: " + response.status_code)
+		exit()
 
 	#setting the image as background
 
 	print("Setting as a background.")
 	
-	
-	#os.replace((currentDirectory + "/APOD.jpg "), background_dir)
-    
-	os.system("mv " + (currentDirectory + "/APOD.jpg ") + background_dir)
-	
+	#opening the file, writing and closing image
+	wallpaper = open(background_dir, 'wb')
+	wallpaper.write(response.content)
+	wallpaper.close()
+
 	print("succesfully changed background.")
-	
+
+	#writing to the logs
+
 	file = open( str(currentDirectory) + "log.txt", "a")
 	file.write("Succesfully downloaded today's APOD image, and changed the background")
 	file.close()
