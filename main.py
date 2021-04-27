@@ -2,7 +2,6 @@
 from colorama import Fore, Style
 import requests
 import json
-from pynotifier import Notification
 import os
 from time import sleep
 
@@ -266,17 +265,7 @@ def downloadBackground():
 	os.system("mv " + (currentDirectory + "/APOD.jpg ") + background_dir)
 	
 	print("succesfully changed background.")
-
-	#Displaying a notification	
-	Notification(
-		title="Image succesfully changed to today's APOD ;D",
-		description="The background image has been succesfully changed to today's APOD.",
-		icon_path=os.path.join(currentDirectory, "Assets/python-logo.png"),
-		duration=2,
-		urgency=Notification.URGENCY_NORMAL,
-
-	).send()
-
+	
 	file = open( str(currentDirectory) + "log.txt", "a")
 	file.write("Succesfully downloaded today's APOD image, and changed the background")
 	file.close()

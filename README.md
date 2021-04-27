@@ -56,14 +56,22 @@ you just need to execute in the terminal
 Or if it doesn't works, try making:
 > pip install -r requirements.txt
 
+If you are on linux and you get errors runing this command,
+remove the "#" before the packages: json, time, os, and py-notifier.
+
 The last step is you to get an api key, (it's 100% free),
 you can get it at: https://api.nasa.gov/?ref=public-apis#signUp
 
 
-
 Then just execute the script in the terminal:
 
+linux:
+
 > python3 ./main.py
+
+or in windows:
+
+> python3 .\mainpy
 
 For setting up the proper configurations of the utility,
 in the "main menu", choose the **option 5** (Initial Setup),
