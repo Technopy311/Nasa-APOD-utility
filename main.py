@@ -79,6 +79,7 @@ def loadAll():
 	api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + KEY)
 	api_url = str(api_url)
 
+
 	background_dir = open((currentDirectory + "/Assets/path.conf"), 'r')
 	background_dir = background_dir.readline()
 
@@ -280,6 +281,7 @@ def downloadBackground():
 	
 	#use requests for download the image
 	response = requests.get(HDURL)
+	
 	if response.status_code == 200:
 		print('Image reached')
 	else:
@@ -303,6 +305,113 @@ def downloadBackground():
 	file = open( str(currentDirectory) + "log.txt", "a")
 	file.write("Succesfully downloaded today's APOD image, and changed the background")
 	file.close()
+
+
+#this next function retrieves an APOD image from an specified date, 
+# using the user's input
+
+def specific():
+	currentDirectory = current()
+	path_file = (currentDirectory + "/Assets/path.conf")
+	key_file = (currentDirectory + "/Assets/API-KEY.conf")
+
+	
+	print("this function retrieves an APOD image from an specified date.")
+	
+	year = input("Enter the year of the image to retrive, format = YYYY, eg: 2011 \n Year: ")
+	month = input("Enter the month of the year, of image to retrieve, format = MM, eg: 7 \n Month: ")
+	day = input("Enter the day of the month, of image to retrieve, format = DD, eg: 21 \n Day: ")
+
+	#data conversion and verify process
+	
+	#conversion to int, to verify if each value, is valid
+	year = int(year)
+	month = int(month)
+	day = int(day)
+
+	#verification of the values
+
+
+	#re conversion to str, to make the request
+
+	year = str(year)
+	month = str(month)
+	day = str(day)
+
+	
+	#reading the api key, from the file
+	
+	file = open(key_file, 'r')
+	key = file.readline()
+	file.close()
+
+	key = str(key)
+
+	#format the url of the api, and the date argument
+
+	api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + key) 
+	date = ("&date=" + year + "-" + month + "-" + day)
+
+	final_url = (api_url + date)
+	print(final_url)
+
+	#making the request of the json data
+	#the final request format is this one: 
+	# https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY?date=YYYY-MM-DD
+
+	request = requests.get(final_url) 
+	status = request.status_code
+	
+	downloaded_data = request.text
+
+	# checking connection
+	if status == 200:
+		text = "Succesfully reached api"
+		print("Status: " + str(status) +", "+ text + "\n")
+	
+	else:
+		text = "Make shure the api key is valid \n and check if you have network connection."
+		print("Request to the API status: " + str(status) +" "+ text + "\n")
+		jk()
+		exit()
+	
+	# parsing the json and 
+	json_data = json.loads(downloaded_data)
+
+	hdurl = json_data['hdurl']
+	
+	#use requests for download the image
+	response = requests.get(hdurl)
+	
+	if response.status_code == 200:
+		print('Image reached')
+	else:
+		print("Something else happened")
+		print("HTTP error: " + response.status_code)
+		exit()
+
+	#setting the image as background
+
+	print("Setting as a background.")
+	
+	file = open(path_file, 'r')
+	background_dir = file.read()
+	file.close()
+
+	#opening the file, writing and closing image
+	wallpaper = open(background_dir, 'wb')
+	wallpaper.write(response.content)
+	wallpaper.close()
+
+	print("succesfully changed background.")
+
+	#writing to the logs
+
+	file = open( str(currentDirectory) + "log.txt", "a")
+	file.write("Succesfully downloaded today's APOD image, and changed the background")
+	file.close()
+
+
 
 
 def setup1():
@@ -423,7 +532,8 @@ def main():
 	print("What would you like to do? \n")
 	print("(1) Change your current background.      (2) Get all info of today image. \n"
 		"(3) Only Download low resolution image.  (4) Only Download high resolution image.\n"
-		"(5) Initial Setup. (6) Reset all config files (wallpaper path & api-key)")
+		"(5) Initial Setup. (6) Reset all config files (wallpaper path & api-key)\n"
+		"(7) Download an image from an specified date")
 	
 	option = input(": ")
 
@@ -461,6 +571,9 @@ def main():
 		print("The option selected is: " +str(option) + "\n")
 		resetConf()
 
+	elif option == 7:
+		specific()
+	
 	else:
 		print("That option doesn't exists or something else went wrong \n")
 		jk()
@@ -475,6 +588,11 @@ if __name__ == '__main__':
 		print(Style.BRIGHT)	
 		main()
 		
+		print("If you are on windows, and the wallpaper doesn't change, do right click on the desktop,\n "
+		"and click refresh. If all its fine, should change, else wait a little more, writing big images is a little slow some times, \n"
+		"else verify the path of the download destination and re configure,\n "
+		"using the assistant" )
+
 		print("\n Would you like to make another thing?")
 		print("(1)Yes (2)No")
 		option = input(": ")
