@@ -4,6 +4,7 @@ import requests
 import json
 import os
 from time import sleep
+import ctypes
 
 
 '''
@@ -14,74 +15,38 @@ and citing the github profile.
 '''
 
 
-PAUSE_TIME = (2)
 
-
-def download_image(url, write_path):
-	print("Downloading")
-	
-	response = requests.get(url)
-
-	if response.status_code == 200:
-		print('Image Downloaded')
-	else:
-		print("Something else happened")
-		print("HTTP error: " + response.status_code)
-		exit()
-
-	#setting the image as background
-
-	print("Saving Image")
-	
-	#opening the file, writing and closing image
-	wallpaper = open(write_path, 'wb')
-	wallpaper.write(response.content)
-	wallpaper.close()
 
 
 def current():
-	currentDirectory = os.getcwd()
-	currentDirectory = str(currentDirectory)
+	current_directory = os.getcwd()
+	current_directory = str(current_directory)
 	
-	return currentDirectory
+	return current_directory
 
 
-def resetConf():
+def loadAll(url_params):
+	current_directory = current()
 
-	print("Making reset to all config files")
-	currentDirectory = current()
-	key_conf = open((currentDirectory + "/Assets/API-KEY.conf"), 'w')
-	key_conf.write("DEMO-KEY")
-	key_conf.close
-
-	path_conf = open((currentDirectory + "/Assets/path.conf"), 'w')
-	path_conf.write("BACKGROUND PATH")
-	path_conf.close
-
-	print("Config files succesfully reseted.")
-
-
-def loadAll():
-
-	global background_dir
-	currentDirectory = current()
-	
 
 	print("INITIALIZING... ")
 	print("Loading the api data.")
-	#Here you can set the api key, you can get it at https://api.nasa.gov/?ref=public-apis#signUp
 
-	key_from_file = open((currentDirectory + "/Assets/API-KEY.conf"), "r")
-	KEY = key_from_file.readline()
-	KEY = str(KEY)
+	key_from_file = open((current_directory + "/Assets/API-KEY.conf"), "r")
+	key = key_from_file.readline()
+	key = str(key)
+
+	if url_params == 0:
+		api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + key)	
+
+	else:
+		api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + key + url_params)
+		api_url = str(api_url)
 
 
-	api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + KEY)
-	api_url = str(api_url)
-
-
-	background_dir = open((currentDirectory + "/Assets/path.conf"), 'r')
+	background_dir = open((current_directory + "/Assets/path.conf"), 'r')
 	background_dir = background_dir.readline()
+
 
 	error = 0	
 
@@ -117,8 +82,8 @@ def loadAll():
 	request = requests.get(api_url)
 	status = request.status_code
 	
-	
-	DATA = request.text
+		
+	raw_data = request.text
 
 	# checking connection
 	if status == 200:
@@ -132,17 +97,71 @@ def loadAll():
 		exit()
 	
 	# parsing the json and 
-	global JSON_DATA 
-	JSON_DATA = json.loads(DATA)
+	json_data = json.loads(raw_data)
+	return(json_data)
+
+
+def download_image(url, write_path):
+	current_directory = current()
+	
+	print("Downloading")
+	
+	response = requests.get(url) 
+
+	if response.status_code == 200:
+		print('Image Downloaded')
+	else:
+		print("Something else happened")
+		print("HTTP error: " + response.status_code)
+		exit()
+
+	#setting the image as background
+
+	print("Saving Image")
+	
+	#opening the file, writing and closing image
+	wallpaper = open(write_path, 'wb')
+	wallpaper.write(response.content)
+	wallpaper.close()
+
+	
+	file = open( str(current_directory) + "log.txt", "a")
+	file.write("Succesfully downloaded today's APOD image, and changed the background")
+	file.close()
 
 
 
+def resetConf():
+
+	print("Making reset to all config files")
+	current_directory = current()
+	key_conf = open((current_directory + "/Assets/API-KEY.conf"), 'w')
+	key_conf.write("DEMO-KEY")
+	key_conf.close
+
+	path_conf = open((current_directory + "/Assets/path.conf"), 'w')
+	path_conf.write("BACKGROUND PATH")
+	path_conf.close
+
+	print("Config files succesfully reseted.")
 
 
+def change_wallpaper(path):
+	#ctypes.windll.user32.SystemParametersInfo(a,b,c,d)
+	# a = 20.  b = 0. c = complete image path. d = 0
+	path = str(path)
+	formated_path = path.replace("\\", "/")
+	ctypes.windll.user32.SystemParametersInfoW(20, 0, path, 0)
 
-def DownloadLowRes():
+
+def download_todays_low_res():
+
+	#loading the json data
+	json_data = loadAll(0)
+
+	
 	#check if the media type is an image
-	media_type = JSON_DATA['media_type']
+	media_type = json_data['media_type']
 
 	if media_type.lower() != "image":
 		print("This media type cannot be set as wallpaper, because it is")
@@ -152,12 +171,14 @@ def DownloadLowRes():
 	#This function only downloads the low resolution image
 
 	#Get the url from the json
-	low_res_url = JSON_DATA['url']
+	low_res_url = json_data['url']
 
-	#Download the image and save it
-	os.system("wget " + str(low_res_url) + " -O Low-Resolution-Img.jpg") 
-	
-	sleep(PAUSE_TIME)
+	current_directory = current()
+	download_image(low_res_url, (current_directory + "Low Resolution APOD image.jpg"))
+
+	print("The image has been saved in the same directory as the program: \n" + current_directory)
+
+	sleep(2)
 
 	print("\n")
 	print("Low resolution image download succesfully")
@@ -165,27 +186,28 @@ def DownloadLowRes():
 
 
 
-def DownloadHD():
-	#check if the media type is an image
+def download_todays_high_def_apod():
 	
-	media_type = JSON_DATA['media_type']
+	json_data = loadAll(0)
+	current_directory = current()
+
+	#check if the media type is an image
+	media_type = json_data['media_type']
 
 	if media_type.lower() != "image":
 		print("This media type cannot be set as wallpaper, because it is")
 		print("Media type: " + media_type)
 		exit()
 
-	current_directory = current()
-
-	#This function only downloads the high resolution image
-
 	#Get the url from the json
-	high_res_url = JSON_DATA['hdurl']
+	high_res_url = json_data['hdurl']
 
 	#Download the image and save it
-	download_image(high_res_rl, (current_directory + "./APOD.jpg"))
+	download_image(high_res_url, (current_directory + "./High Res APOD image.jpg"))
 
-	sleep(PAUSE_TIME)
+	print("The image has been saved in the same directory as the program")
+
+	sleep(2)
 
 	print("\n")
 	print("High resolution image download succesfully")
@@ -193,43 +215,59 @@ def DownloadHD():
 
 
 
-def getInfo(selection):
-	
-	# number 1 is the same asTrue
-	if True:
-		#title
-		title = JSON_DATA['title']
-		print("The title of this image is: "+str(title) +"\n")
+def getInfo():
 
-		sleep(PAUSE_TIME)
+	json_data = loadAll(0)
 
-		#Photo's date
-		date = JSON_DATA['date']
-		print("The date of this photo is: "+ str(date) +"\n\n")
+	#Get the image's title
+	title = json_data['title']
+	print("The title of this image is: " + str(title) + "\n")
 
-		sleep(PAUSE_TIME)
+	sleep(2)
 
-		#high defition url photo
+
+	#Image's date
+	image_date = json_data['date']
+	print("The date of this photo is: " + str(image_date) + "\n")
+
+	sleep(2)
+
+	#Get the media type
+	media_type = json_data['media_type']
+	print("The tipe of this media is: " + str(media_type) + " \n")
+
+
+	try:
+		#high defition url of the image	
+		img_url = json_data['hdurl']
+		print("The high definition image's url is " + str(img_url) + "\n")
 		
-		IMGURL = JSON_DATA['hdurl']
-		print("The high definition image's url is "+ str(IMGURL) +"\n")
+	except:
+		print("No information for parameter hdurl")
+		pass
+
+	sleep(2)
 
 
-		sleep(PAUSE_TIME)
+	try:
+		#Retrieves the low definition url of the image
+		low_res_url = json_data['url']
+		print("The low definition media url is: " + str(low_res_url) + " \n")
+	
+	except:
+		print("No information for parameter url")
+		pass
+		
+	sleep(2)
 
-		if selection == 2:
-			
-			media_type = JSON_DATA['media_type']
-			print("The tipe of this media is: " + str(media_type) + " \n")
-			sleep(PAUSE_TIME)
 
-			service_version = JSON_DATA['service_version']
-			print("The version of the service(NASA APOD API) is: " + str(service_version) + " \n")
-			sleep(PAUSE_TIME)
+	#Retrieves the nasa api version
+	service_version = json_data['service_version']
+	print("The version of the service(NASA APOD API) is: " + str(service_version) + " \n")
+	
+	sleep(2)
 
-			low_res_url = JSON_DATA['url']
-			print("The low definition media url is: " + str(low_res_url) + " \n")
-			sleep(PAUSE_TIME)
+
 
 
 
@@ -252,85 +290,111 @@ def jk():
 
 
 
-def downloadBackground():
+def download_todays_apod():
 	
+	json_data = loadAll(0)
+
 	#Check if the file is an image
-	media_type = JSON_DATA['media_type']
+	media_type = json_data['media_type']
 
 	if media_type.lower() != "image":
 		print("This media type cannot be set as wallpaper, because it is")
 		print("Media type: " + media_type)
 		exit()
 
-	currentDirectory = current()
+
+
+	current_directory = current()
 
 	#read the wallpaper route from the path.conf file
-	background_dir = open((currentDirectory + "/Assets/path.conf"), 'r')
+	background_dir = open((current_directory + "/Assets/path.conf"), 'r')
 	background_dir = background_dir.readline()
 
-
-	#Getting the info from json
-
-	getInfo(1)
-
+	
 	#Starting the download process of the image
-	print('Downloading the image. \n\n')
-	sleep(PAUSE_TIME)
+	hd_url = json_data['hdurl']
 	
-	HDURL = JSON_DATA['hdurl']
-	
-	#use requests for download the image
-	response = requests.get(HDURL)
-	
-	if response.status_code == 200:
-		print('Image reached')
-	else:
-		print("Something else happened")
-		print("HTTP error: " + response.status_code)
-		exit()
+	#calling the download image function
+	download_image(hd_url, background_dir)
+
 
 	#setting the image as background
+	change_wallpaper(background_dir)
 
-	print("Setting as a background.")
-	
-	#opening the file, writing and closing image
-	wallpaper = open(background_dir, 'wb')
-	wallpaper.write(response.content)
-	wallpaper.close()
-
+	#Calling the function for refreshing the wallpaper
 	print("succesfully changed background.")
 
-	#writing to the logs
-
-	file = open( str(currentDirectory) + "log.txt", "a")
-	file.write("Succesfully downloaded today's APOD image, and changed the background")
-	file.close()
-
-
-#this next function retrieves an APOD image from an specified date, 
+# this next function retrieves an APOD image from an specified date, 
 # using the user's input
 
-def specific():
-	currentDirectory = current()
-	path_file = (currentDirectory + "/Assets/path.conf")
-	key_file = (currentDirectory + "/Assets/API-KEY.conf")
 
-	
+def specific():
+	current_directory = current()
+	path_file = (current_directory + "/Assets/path.conf")
+	key_file = (current_directory + "/Assets/API-KEY.conf")
+
+
 	print("this function retrieves an APOD image from an specified date.")
 	
+	sleep(1)
+
+	print("Note: The first APOD image, based on Wikipedia, is the june 16 of 1995, \n "
+	"so dates older than that, are invalid")
+
+	sleep(1)
+
 	year = input("Enter the year of the image to retrive, format = YYYY, eg: 2011 \n Year: ")
 	month = input("Enter the month of the year, of image to retrieve, format = MM, eg: 7 \n Month: ")
 	day = input("Enter the day of the month, of image to retrieve, format = DD, eg: 21 \n Day: ")
 
 	#data conversion and verify process
 	
-	#conversion to int, to verify if each value, is valid
-	year = int(year)
-	month = int(month)
-	day = int(day)
+	#Conversion to int, to verify if each value, is valid
 
-	#verification of the values
+	#Conversion of the value year for further evaluation
+	try:
+		year = int(year)
+		
+	except:
+		print("The value for the year is not valid.")
+		exit()
 
+	#Conversion of the value month for further evaluation
+	try:
+		month = int(month)
+		
+	except:
+		print("The value for the month is not valid.")
+		exit()
+
+	#Conversion of the value day for further evaluation
+	try:
+		day = int(day)
+		
+	except:
+		print("The value for day year is not valid.")
+		exit()
+
+
+	#Evalueation of the values
+
+	if year < 1995:
+		print("The value for the year is not valid.")
+		exit()
+	else:
+		pass
+
+	if month > 13 or month < 1:
+		print("The value for the month is not valid.")
+		exit()
+	else:
+		pass
+
+	if day > 31 or day < 1:
+		print("The value for the day is not valid.")
+		exit()
+	else:
+		pass
 
 	#re conversion to str, to make the request
 
@@ -346,68 +410,32 @@ def specific():
 	file.close()
 
 	key = str(key)
-
-	#format the url of the api, and the date argument
-
-	api_url = ("https://api.nasa.gov/planetary/apod?api_key=" + key) 
+	
 	date = ("&date=" + year + "-" + month + "-" + day)
-
-	final_url = (api_url + date)
-	print(final_url)
+	json_data = loadAll("&" + date)
 
 	#making the request of the json data
 	#the final request format is this one: 
-	# https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY?date=YYYY-MM-DD
-
-	request = requests.get(final_url) 
-	status = request.status_code
 	
-	downloaded_data = request.text
+	#https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY?date=YYYY-MM-DD
 
-	# checking connection
-	if status == 200:
-		text = "Succesfully reached api"
-		print("Status: " + str(status) +", "+ text + "\n")
-	
-	else:
-		text = "Make shure the api key is valid \n and check if you have network connection."
-		print("Request to the API status: " + str(status) +" "+ text + "\n")
-		jk()
-		exit()
-	
-	# parsing the json and 
-	json_data = json.loads(downloaded_data)
-
-	hdurl = json_data['hdurl']
-	
-	#use requests for download the image
-	response = requests.get(hdurl)
-	
-	if response.status_code == 200:
-		print('Image reached')
-	else:
-		print("Something else happened")
-		print("HTTP error: " + response.status_code)
-		exit()
-
-	#setting the image as background
-
-	print("Setting as a background.")
 	
 	file = open(path_file, 'r')
-	background_dir = file.read()
-	file.close()
+	writing_path = file.read()
+	file.close
 
-	#opening the file, writing and closing image
-	wallpaper = open(background_dir, 'wb')
-	wallpaper.write(response.content)
-	wallpaper.close()
+	hdurl = json_data['hdurl']
+
+	download_image(hdurl, writing_path)
+
+	change_wallpaper(writing_path)	
 
 	print("succesfully changed background.")
 
+
 	#writing to the logs
 
-	file = open( str(currentDirectory) + "log.txt", "a")
+	file = open( str(current_directory) + "log.txt", "a")
 	file.write("Succesfully downloaded today's APOD image, and changed the background")
 	file.close()
 
@@ -415,9 +443,9 @@ def specific():
 
 
 def setup1():
-	currentDirectory = current()
-	path_file = (currentDirectory + "/Assets/path.conf")
-	key_file = (currentDirectory + "/Assets/API-KEY.conf")
+	current_directory = current()
+	path_file = (current_directory + "/Assets/path.conf")
+	key_file = (current_directory + "/Assets/API-KEY.conf")
 
 	print("Be conscient that your current wallpaper will be replaced, ")
 	print("So make a copy of it, if you wana save it.")
@@ -450,7 +478,7 @@ def setup1():
 
 	if SecondOption == 1:
 		loadAll()
-		downloadBackground()
+		download_todays_apod()
 	else:
 		jk()
 		exit()
@@ -475,7 +503,7 @@ def setup2():
 	sleep(4)
 	print("you can move the file wherever you want, but copy the path to it")
 	print("Example: /home/USERNAME/Desktop/anyname.jpg")
-	sleep(PAUSE_TIME)
+	sleep(2)
 	print("yes, it must include the name of the file.")
 	sleep(10)
 	print("Once you made all that, just make it as your background wallpaper, \n"
@@ -486,10 +514,10 @@ def setup2():
 	sleep(30)
 	print("If you did it, now the only missing thing to do, is to ")
 	print("enter the path where the file is, that way")
-	sleep(PAUSE_TIME)
+	sleep(2)
 	print("The next time you execute the script, you only have to choose the ")
 	print("Option 1 \n")
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 	setup1()
 
@@ -545,24 +573,20 @@ def main():
 
 	if option == 1:
 		print("The option selected is: " +str(option) + "\n")
-		loadAll()
-		downloadBackground()
+		download_todays_apod()
 
 	elif option == 2:
 		print("The option selected is: " +str(option) + "\n")
-		loadAll()
-		getInfo(2)
+		getInfo()
 
 	elif option == 3:
 		print("The option selected is: " +str(option) + "\n")
-		loadAll()
-		DownloadLowRes()
+		download_todays_low_res()
 
 	elif option == 4:
 		print("The option selected is: " +str(option) + "\n")
-		loadAll()
-		DownloadHD()
-
+		download_todays_high_def_apod()
+		
 	elif option == 5:
 		print("The option selected is: " +str(option) + "\n")
 		InitialSetup()
@@ -595,6 +619,7 @@ if __name__ == '__main__':
 
 		print("\n Would you like to make another thing?")
 		print("(1)Yes (2)No")
+
 		option = input(": ")
 		option = int(option)
 
