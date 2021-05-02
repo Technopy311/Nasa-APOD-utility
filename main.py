@@ -14,7 +14,7 @@ and citing the github profile.
 [GitHub Profile: (https://github.com/Technopy311)]
 '''
 
-PAUSE_TIME = (2)
+
 
 
 
@@ -178,7 +178,7 @@ def download_todays_low_res():
 
 	print("The image has been saved in the same directory as the program: \n" + current_directory)
 
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 	print("\n")
 	print("Low resolution image download succesfully")
@@ -207,7 +207,7 @@ def download_todays_high_def_apod():
 
 	print("The image has been saved in the same directory as the program")
 
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 	print("\n")
 	print("High resolution image download succesfully")
@@ -223,14 +223,14 @@ def getInfo():
 	title = json_data['title']
 	print("The title of this image is: " + str(title) + "\n")
 
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 
 	#Image's date
 	image_date = json_data['date']
 	print("The date of this photo is: " + str(image_date) + "\n")
 
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 	#Get the media type
 	media_type = json_data['media_type']
@@ -246,7 +246,7 @@ def getInfo():
 		print("No information for parameter hdurl")
 		pass
 
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 
 	try:
@@ -258,14 +258,14 @@ def getInfo():
 		print("No information for parameter url")
 		pass
 		
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 
 	#Retrieves the nasa api version
 	service_version = json_data['service_version']
 	print("The version of the service(NASA APOD API) is: " + str(service_version) + " \n")
 	
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 
 
@@ -310,12 +310,8 @@ def download_todays_apod():
 	background_dir = open((current_directory + "/Assets/path.conf"), 'r')
 	background_dir = background_dir.readline()
 
-
-	#Getting the info of the image from the json
-	getInfo()
-
+	
 	#Starting the download process of the image
-
 	hd_url = json_data['hdurl']
 	
 	#calling the download image function
@@ -340,8 +336,12 @@ def specific():
 
 	print("this function retrieves an APOD image from an specified date.")
 	
-	note("The first APOD image, based on Wikipedia, is the june 16 of 1995, \n "
+	sleep(1)
+
+	print("Note: The first APOD image, based on Wikipedia, is the june 16 of 1995, \n "
 	"so dates older than that, are invalid")
+
+	sleep(1)
 
 	year = input("Enter the year of the image to retrive, format = YYYY, eg: 2011 \n Year: ")
 	month = input("Enter the month of the year, of image to retrieve, format = MM, eg: 7 \n Month: ")
@@ -349,12 +349,34 @@ def specific():
 
 	#data conversion and verify process
 	
-	#conversion to int, to verify if each value, is valid
-	year = int(year)
-	month = int(month)
-	day = int(day)
+	#Conversion to int, to verify if each value, is valid
 
-	#verification of the values
+	#Conversion of the value year for further evaluation
+	try:
+		year = int(year)
+		
+	except:
+		print("The value for the year is not valid.")
+		exit()
+
+	#Conversion of the value month for further evaluation
+	try:
+		month = int(month)
+		
+	except:
+		print("The value for the month is not valid.")
+		exit()
+
+	#Conversion of the value day for further evaluation
+	try:
+		day = int(day)
+		
+	except:
+		print("The value for day year is not valid.")
+		exit()
+
+
+	#Evalueation of the values
 
 	if year < 1995:
 		print("The value for the year is not valid.")
@@ -481,7 +503,7 @@ def setup2():
 	sleep(4)
 	print("you can move the file wherever you want, but copy the path to it")
 	print("Example: /home/USERNAME/Desktop/anyname.jpg")
-	sleep(PAUSE_TIME)
+	sleep(2)
 	print("yes, it must include the name of the file.")
 	sleep(10)
 	print("Once you made all that, just make it as your background wallpaper, \n"
@@ -492,10 +514,10 @@ def setup2():
 	sleep(30)
 	print("If you did it, now the only missing thing to do, is to ")
 	print("enter the path where the file is, that way")
-	sleep(PAUSE_TIME)
+	sleep(2)
 	print("The next time you execute the script, you only have to choose the ")
 	print("Option 1 \n")
-	sleep(PAUSE_TIME)
+	sleep(2)
 
 	setup1()
 
