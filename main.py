@@ -4,6 +4,7 @@ import requests
 import json
 import os
 from time import sleep
+import ctypes
 
 
 '''
@@ -20,7 +21,7 @@ PAUSE_TIME = (2)
 def download_image(url, write_path):
 	print("Downloading")
 	
-	response = requests.get(url)
+	response = requests.get(url) 
 
 	if response.status_code == 200:
 		print('Image Downloaded')
@@ -136,7 +137,12 @@ def loadAll():
 	JSON_DATA = json.loads(DATA)
 
 
-
+def change_wallpaper(path):
+	#ctypes.windll.user32.SystemParametersInfo(a,b,c,d)
+	# a = 20.  b = 0. c = complete image path. d = 0
+	path = str(path)
+	formated_path = path.replace("\\", "/")
+	ctypes.windll.user32.SystemParametersInfoW(20, 0, path, 0)
 
 
 
@@ -154,9 +160,9 @@ def DownloadLowRes():
 	#Get the url from the json
 	low_res_url = JSON_DATA['url']
 
-	#Download the image and save it
-	os.system("wget " + str(low_res_url) + " -O Low-Resolution-Img.jpg") 
-	
+	currentdirectory = current()
+	download_image(low_res_url, (currentdirectory + Low-Resolution-Img.jpg))
+
 	sleep(PAUSE_TIME)
 
 	print("\n")
@@ -193,43 +199,59 @@ def DownloadHD():
 
 
 
-def getInfo(selection):
+def getInfo():
 	
 	# number 1 is the same asTrue
-	if True:
-		#title
-		title = JSON_DATA['title']
-		print("The title of this image is: "+str(title) +"\n")
 
-		sleep(PAUSE_TIME)
+	#Get the image's title
+	title = JSON_DATA['title']
+	print("The title of this image is: " + str(title) + "\n")
 
-		#Photo's date
-		date = JSON_DATA['date']
-		print("The date of this photo is: "+ str(date) +"\n\n")
+	sleep(PAUSE_TIME)
 
-		sleep(PAUSE_TIME)
 
-		#high defition url photo
-		
+	#Image's date
+	date = JSON_DATA['date']
+	print("The date of this photo is: " + str(date) + "\n")
+
+	sleep(PAUSE_TIME)
+
+	#Get the media type
+	media_type = JSON_DATA['media_type']
+	print("The tipe of this media is: " + str(media_type) + " \n")
+
+
+	try:
+		#high defition url of the image	
 		IMGURL = JSON_DATA['hdurl']
-		print("The high definition image's url is "+ str(IMGURL) +"\n")
+		print("The high definition image's url is " + str(IMGURL) + "\n")
+		
+	except:
+		print("No information for parameter hdurl")
+		pass
+
+	sleep(PAUSE_TIME)
 
 
-		sleep(PAUSE_TIME)
+	try:
+		#Retrieves the low definition url of the image
+		low_res_url = JSON_DATA['url']
+		print("The low definition media url is: " + str(low_res_url) + " \n")
+	
+	except:
+		print("No information for parameter url")
+		pass
+		
+	sleep(PAUSE_TIME)
 
-		if selection == 2:
-			
-			media_type = JSON_DATA['media_type']
-			print("The tipe of this media is: " + str(media_type) + " \n")
-			sleep(PAUSE_TIME)
 
-			service_version = JSON_DATA['service_version']
-			print("The version of the service(NASA APOD API) is: " + str(service_version) + " \n")
-			sleep(PAUSE_TIME)
+	#Retrieves the nasa api version
+	service_version = JSON_DATA['service_version']
+	print("The version of the service(NASA APOD API) is: " + str(service_version) + " \n")
+	
+	sleep(PAUSE_TIME)
 
-			low_res_url = JSON_DATA['url']
-			print("The low definition media url is: " + str(low_res_url) + " \n")
-			sleep(PAUSE_TIME)
+
 
 
 
@@ -262,6 +284,8 @@ def downloadBackground():
 		print("Media type: " + media_type)
 		exit()
 
+
+
 	currentDirectory = current()
 
 	#read the wallpaper route from the path.conf file
@@ -269,9 +293,8 @@ def downloadBackground():
 	background_dir = background_dir.readline()
 
 
-	#Getting the info from json
-
-	getInfo(1)
+	#Getting the info of the image from the json
+	getInfo()
 
 	#Starting the download process of the image
 	print('Downloading the image. \n\n')
@@ -280,16 +303,10 @@ def downloadBackground():
 	HDURL = JSON_DATA['hdurl']
 	
 	#use requests for download the image
-	response = requests.get(HDURL)
 	
-	if response.status_code == 200:
-		print('Image reached')
-	else:
-		print("Something else happened")
-		print("HTTP error: " + response.status_code)
-		exit()
 
 	#setting the image as background
+	change_wallpaper(background_dir)
 
 	print("Setting as a background.")
 	
@@ -297,6 +314,12 @@ def downloadBackground():
 	wallpaper = open(background_dir, 'wb')
 	wallpaper.write(response.content)
 	wallpaper.close()
+
+	#Calling the function 
+	#for refreshing the wallpaper
+
+	
+
 
 	print("succesfully changed background.")
 
@@ -551,7 +574,7 @@ def main():
 	elif option == 2:
 		print("The option selected is: " +str(option) + "\n")
 		loadAll()
-		getInfo(2)
+		getInfo()
 
 	elif option == 3:
 		print("The option selected is: " +str(option) + "\n")
@@ -595,6 +618,7 @@ if __name__ == '__main__':
 
 		print("\n Would you like to make another thing?")
 		print("(1)Yes (2)No")
+
 		option = input(": ")
 		option = int(option)
 
