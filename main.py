@@ -412,7 +412,7 @@ def specific():
 	key = str(key)
 	
 	date = ("&date=" + year + "-" + month + "-" + day)
-	json_data = loadAll("&" + date)
+	json_data = loadAll(date)
 
 	#making the request of the json data
 	#the final request format is this one: 
