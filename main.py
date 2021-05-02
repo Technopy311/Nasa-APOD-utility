@@ -302,8 +302,9 @@ def downloadBackground():
 	
 	HDURL = JSON_DATA['hdurl']
 	
-	#use requests for download the image
-	
+	#calling the download image function
+	download_image(HDURL, background_dir)
+
 
 	#setting the image as background
 	change_wallpaper(background_dir)
