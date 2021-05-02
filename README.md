@@ -1,6 +1,6 @@
 # NASA APOD Utility
 
-## This python3 script has been made only for fun and for killing time during quarantine time and it's not official by NASA.
+## This python3 script has been made only for fun and for killing time during lockdown time and it's not official by NASA.
 
 
 ***
@@ -26,38 +26,22 @@ using the Nasa's APOD api, whith this utility you can:
 
 **APOD stands for Astronomy Picture of the Day.**
 
-If you want to use this script with cronjobs, the main.py script
-won't work, so for that i've designed the "change-background.py"
-script, there, you only need to change the lines, 10 and 16
-there, you just need to define the background path, and the 
-API key, and that's it. 
-**you need to have the main.py script on the same directory as the "change-background.py"**
-
 ### Alert:
-This utility, was designed for **_linux enviroments_**, 
-and maybe MacOs, but never tested in it, it was tested and made
-in Ubuntu LTS 20.4, so it will probaly work on any debian
-based distro like ubuntu-mint, or in Raspberry Pi OS.
-this utility it only uses python and no other languages.
-It hasn't been tested on fedora, gentoo or arch based 
-distros, so it's not known if it will work properly on 
-any of these, or other.
+This utility, was designed for **_Windows_**, 
+and maybe MacOs, but never tested in MacOs, it was tested and made
+in Ubuntu LTS 20.4, then optimized just for Windows, so it will only work in windows
+this utility only uses python and no other languages.
 
-This utility **has not** been optimized 100% for 
-Windows yet, i would be very thankful if you could help in it.
-
+This utility **has** been optimized 100% now.
 
 ## Installing Instructions.
 First clone the repo, then in the repo folder, 
-you just need to execute in the terminal
+you just need to execute in a terminal
 
 > pip3 install -r requirements.txt
 
 Or if it doesn't works, try making:
 > pip install -r requirements.txt
-
-If you are on linux and you get errors runing this command,
-remove the "#" before the packages: json, time, os, and py-notifier.
 
 The last step is you to get an api key, (it's 100% free),
 you can get it at: https://api.nasa.gov/?ref=public-apis#signUp
@@ -65,7 +49,7 @@ you can get it at: https://api.nasa.gov/?ref=public-apis#signUp
 
 Then just execute the script in the terminal:
 
-linux:
+Windows:
 
 > python3 ./main.py
 
@@ -86,4 +70,3 @@ or the api-key, just run the assistant again.
 
 ### I hope you like this you like this utility, and if you think there is any update/upgrade to do
 ### Just post it on the issues tab, use this utility carely.
-
